@@ -117,13 +117,14 @@
         const activeProduct = document.querySelector('.product');
         console.log('activeProduct: ', activeProduct);
         /* if there is active product and it's not thisProduct.element, remove class active from it */
+        
         if(activeProduct != thisProduct.element) { 
           activeProduct.classList.remove('active');
-          console.log('usunięto klasę active');
+          console.log('usunięto klasę active z  pozostałych produktów');
         }
         /* toggle active class on thisProduct.element */
         thisProduct.element.classList.toggle('active');
-        
+        console.log('activ toggle');
       });
     }
   }
