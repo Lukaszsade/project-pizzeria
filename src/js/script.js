@@ -12,8 +12,8 @@
       cart: '#cart',
     },
     all: {
-      menuProducts: '#product-list > .product',
-      menuProductsActive: '#product-list > .product.active',
+      menuProducts: '.product',
+      menuProductsActive: '.product.active',
       formInputs: 'input, select',
     },
     menuProduct: {
@@ -114,20 +114,16 @@
         event.preventDefault();
         console.log('event.preventDefault');
         /* find active product (product that has active class) */
-        const activeProducts = document.querySelectorAll(select.all.menuProductsActive);
-        console.log('activeProducts: ', activeProducts);
-        
-        for(let activeProduct of activeProducts) {
-          /* if there is active product and it's not thisProduct.element, remove class active from it */
-          if(activeProduct != thisProduct.element) { 
-            activeProduct.classList.remove('active');
-            console.log('usunięto klasę active');
-          } else {
-            thisProduct.element.classList.add('active');
-          }
-          /* toggle active class on thisProduct.element */
-          thisProduct.element.classList.toggle('active');
+        const activeProduct = document.querySelector('.product');
+        console.log('activeProduct: ', activeProduct);
+        /* if there is active product and it's not thisProduct.element, remove class active from it */
+        if(activeProduct != thisProduct.element) { 
+          activeProduct.classList.remove('active');
+          console.log('usunięto klasę active');
         }
+        /* toggle active class on thisProduct.element */
+        thisProduct.element.classList.toggle('active');
+        
       });
     }
   }
