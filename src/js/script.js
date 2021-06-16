@@ -123,21 +123,19 @@
       //const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
       //console.log('clickableTrigger: ', clickableTrigger);
       
-      /* START: add event listener to clickable trigger on event click */
       thisProduct.accordionTrigger.addEventListener('click', function(event) {
-        /* prevent default action for event */
         event.preventDefault();
         console.log('event.preventDefault');
-        /* find active product (product that has active class) */
+        
         const activeProduct = document.querySelector(select.all.menuProductsActive);
         console.log('activeProduct: ', activeProduct);
-        /* if there is active product and it's not thisProduct.element, remove class active from it */
+
         if(activeProduct && activeProduct != thisProduct.element) { 
-          activeProduct.classList.remove('active');// zmienić tutaj na select.all.menuProductsActive
+          activeProduct.classList.remove(select.all.menuProductsActive);
           console.log('usunięto klasę active z pozostałych produktów');
         }
-        /* toggle active class on thisProduct.element */
-        thisProduct.element.classList.toggle('active');
+
+        thisProduct.element.classList.toggle(select.all.menuProductsActive);
         console.log('activ toggle');
       });
     }
@@ -145,6 +143,7 @@
     initOrderForm(){
       const thisProduct = this;
       console.log('initOrderForm');
+
       thisProduct.form.addEventListener('submit', function(event){
         event.preventDefault();
         thisProduct.processOrder();
@@ -170,45 +169,35 @@
       const formData = utils.serializeFormToObject(thisProduct.form);
       console.log('formData', formData);
 
-      // set price to default price
       let price = thisProduct.data.price;
       
       console.log('defaultprice: ', price);
-      // for every category (param)...
+      
       for(let paramId in thisProduct.data.params) {
         // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
         const param = thisProduct.data.params[paramId];
 
-        // for every option in this category
         for(let optionId in param.options) {
-          // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
-          
-          console.log('paramId: ', paramId);
-          console.log('param: ', param);
-          console.log('param: ', param);
           console.log('optionId: ', optionId, ', option: ', option);
-          console.log('param.options[optionId]: ', param.options[optionId]);
           
-          // check if there is param with a name of paramId in formData and if it includes optionId
           if(formData[paramId] && formData[paramId].includes(optionId)) {
             
-            // check if the option is not default
             if(!option.default) {
-              // add option price to price variable
               price = price + option.price;
               console.log('option.price: ', option.price);
-            } else {
-              if(option.default) {
-                price = price - option.price;
-                console.log('option.price: ', option.price);
-              }
             } 
-          } 
+          } else {
+            if(option.default) {
+              price = price - option.price;
+              console.log('option.price: ', option.price);
+            }
+          }
           
           const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
+          
           if(optionImage) {
-            if (formData.paramId && formData[paramId].includes(optionId)) {
+            if (formData[paramId] && formData[paramId].includes(optionId)) {
               optionImage.classList.add(classNames.menuProduct.imageVisible);
             } else { 
               optionImage.classList.remove(classNames.menuProduct.imageVisible);
@@ -217,7 +206,6 @@
         }
       }
       console.log('price: ', price);
-      // update calculated price in the HTML
       thisProduct.priceElem.innerHTML = price;
     }
   }
