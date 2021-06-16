@@ -131,11 +131,11 @@
         console.log('activeProduct: ', activeProduct);
 
         if(activeProduct && activeProduct != thisProduct.element) { 
-          activeProduct.classList.remove(select.all.menuProductsActive);
+          activeProduct.classList.remove(classNames.menuProduct.wrapperActive);
           console.log('usunięto klasę active z pozostałych produktów');
         }
 
-        thisProduct.element.classList.toggle(select.all.menuProductsActive);
+        thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive);
         console.log('activ toggle');
       });
     }
