@@ -112,6 +112,7 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
 
     initAccordion() {
@@ -121,6 +122,7 @@
       /* find the clickable trigger (the element that should react to clicking) */
       //const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
       //console.log('clickableTrigger: ', clickableTrigger);
+      
       /* START: add event listener to clickable trigger on event click */
       thisProduct.accordionTrigger.addEventListener('click', function(event) {
         /* prevent default action for event */
@@ -131,7 +133,7 @@
         console.log('activeProduct: ', activeProduct);
         /* if there is active product and it's not thisProduct.element, remove class active from it */
         if(activeProduct && activeProduct != thisProduct.element) { 
-          activeProduct.classList.remove('active');
+          activeProduct.classList.remove('active');// zmienić tutaj na select.all.menuProductsActive
           console.log('usunięto klasę active z pozostałych produktów');
         }
         /* toggle active class on thisProduct.element */
@@ -170,7 +172,8 @@
 
       // set price to default price
       let price = thisProduct.data.price;
-      console.log('thisProduct.data.price: ', thisProduct.data.price);
+      
+      console.log('defaultprice: ', price);
       // for every category (param)...
       for(let paramId in thisProduct.data.params) {
         // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
@@ -189,16 +192,21 @@
           
           // check if there is param with a name of paramId in formData and if it includes optionId
           if(formData[paramId] && formData[paramId].includes(optionId)){
+            const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
+            if(optionImage){
+              optionImage.classList.add(classNames.menuProduct.imageVisible);
+            }
             // check if the option is not default
             if(!option.default){
               // add option price to price variable
               price = price + option.price;
               console.log('option.price: ', option.price);
-            } 
-          } else {
-            if(option.default) {
-              price = price - option.price;
-              console.log('option.price: ', option.price);
+            } else {
+              if(option.default) {
+                price = price - option.price;
+                console.log('option.price: ', option.price);
+              }
+              optionImage.classList.remove(classNames.menuProduct.imageVisible);
             }
           }           
         }
