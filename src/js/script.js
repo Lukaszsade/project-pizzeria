@@ -206,8 +206,10 @@
                 price = price - option.price;
                 console.log('option.price: ', option.price);
               }
-              optionImage.classList.remove(classNames.menuProduct.imageVisible);
-            }
+            } 
+          } else {
+            const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
+            optionImage.classList.remove(classNames.menuProduct.imageVisible);
           }           
         }
       }
