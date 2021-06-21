@@ -114,7 +114,7 @@
       console.log('wywołano announce');
     }
 
-    announce(){
+    announce() {
       const thisWidget = this;
 
       const event = new Event('updated');
@@ -157,17 +157,21 @@
       thisCart.dom.toggleTrigger = element.querySelector(select.cart.toggleTrigger); 
     }
 
-    initActions(){
+    initActions() {
       const thisCart = this;
       thisCart.dom.toggleTrigger.addEventListener('click', function(){
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
       });
     }
+
+    add(menuProduct) {
+      //const thisCart = this;
+      console.log('adding product', menuProduct);
+    }
   }
- 
 
   const app = {
-    initMenu: function (){
+    initMenu: function () {
       const thisApp = this;
       console.log('thisApp.data: ', thisApp.data);
       
@@ -188,7 +192,7 @@
       thisApp.cart = new Cart(cartElem);
     }, 
 
-    init: function(){
+    init: function() {
       const thisApp = this;
       console.log('*** App starting ***');
       console.log('thisApp:', thisApp);
@@ -204,7 +208,7 @@
 
   class Product {
     //wzor funkcji
-    constructor (id, data){
+    constructor (id, data) {
       const thisProduct = this;
       thisProduct.id = id;
       thisProduct.data = data;
@@ -227,7 +231,7 @@
       menuContainer.appendChild(thisProduct.element);
     }
 
-    getElements(){
+    getElements() {
       const thisProduct = this;
     
       thisProduct.dom = {};
@@ -250,7 +254,6 @@
       
       thisProduct.dom.accordionTrigger.addEventListener('click', function(event) {
         event.preventDefault();
-        console.log('event.preventDefault');
         
         const activeProduct = document.querySelector(select.all.menuProductsActive);
         console.log('activeProduct: ', activeProduct);
@@ -265,7 +268,7 @@
       });
     }
 
-    initOrderForm(){
+    initOrderForm() {
       const thisProduct = this;
       console.log('initOrderForm');
 
@@ -282,10 +285,11 @@
       thisProduct.dom.cartButton.addEventListener('click', function(event) {
         event.preventDefault();
         thisProduct.processOrder();
+        thisProduct.addToCart();
       });      
     }
 
-    initAmountWidget(){
+    initAmountWidget() {
       const thisProduct = this;
 
       thisProduct.amountWidget = new AmountWidget(thisProduct.dom.amountWidgetElem);
@@ -295,9 +299,9 @@
     
     }
 
-    processOrder(){
+    processOrder() {
       const thisProduct = this;
-      console.log('this: ', this);
+      console.log('thisProduct: ', this);
 
       // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
       const formData = utils.serializeFormToObject(thisProduct.dom.form);
@@ -305,18 +309,12 @@
 
       let price = thisProduct.data.price;
       
-      console.log('defaultprice: ', price);
-      
       for(let paramId in thisProduct.data.params) {
         // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
         const param = thisProduct.data.params[paramId];
-
         for(let optionId in param.options) {
           const option = param.options[optionId];
-          console.log('optionId: ', optionId, ', option: ', option);
-          
           if(formData[paramId] && formData[paramId].includes(optionId)) {
-            
             if(!option.default) {
               price = price + option.price;
               console.log('option.price: ', option.price);
@@ -340,7 +338,29 @@
         }
       }
       price *= thisProduct.amountWidget.value;
+      thisProduct.priceSingle = price;
       thisProduct.dom.priceElem.innerHTML = price;
+    }
+
+    addToCart() {
+      const thisProduct = this;
+
+      app.cart.add(thisProduct.prepareCartProduct);
+    }
+
+    prepareCartProduct() {
+      const thisProduct = this;
+
+      const productSummary = {};
+      productSummary.id = thisProduct.id;
+      productSummary.name = thisProduct.data.name;
+      productSummary.amount = thisProduct.amountWidget.value;
+      productSummary.priceSingle = thisProduct.priceSingle;
+      productSummary.price = productSummary.priceSingle * productSummary.amount;
+      productSummary.params = {};
+      console.log('productSummary: ', productSummary);
+
+      return productSummary;
     }
   }
   
