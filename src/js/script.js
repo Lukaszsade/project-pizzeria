@@ -190,6 +190,7 @@
 
       const cartElem = document.querySelector(select.containerOf.cart);
       thisApp.cart = new Cart(cartElem);
+      console.log('thisApp.cart: ', thisApp.cart);
     }, 
 
     init: function() {
@@ -343,24 +344,27 @@
     }
 
     addToCart() {
-      const thisProduct = this;
-
+      const thisProduct = this; 
+      
       app.cart.add(thisProduct.prepareCartProduct);
+      console.log('prepareCartProduct: ', thisProduct.prepareCartProduct);
     }
 
     prepareCartProduct() {
       const thisProduct = this;
 
-      const productSummary = {};
-      productSummary.id = thisProduct.id;
-      productSummary.name = thisProduct.data.name;
-      productSummary.amount = thisProduct.amountWidget.value;
-      productSummary.priceSingle = thisProduct.priceSingle;
-      productSummary.price = productSummary.priceSingle * productSummary.amount;
-      productSummary.params = {};
-      console.log('productSummary: ', productSummary);
+      const productSummary = {
+        id: thisProduct.id,
+        name: thisProduct.data.nam,
+        amount: thisProduct.amountWidget.value,
+        priceSingle: thisProduct.priceSingle,
+        price: productSummary.priceSingle * productSummary.amount,
+        params: {},
+      };
 
+      console.log('productSummary: ', productSummary);
       return productSummary;
+      
     }
   }
   
