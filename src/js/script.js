@@ -155,6 +155,7 @@
       thisCart.dom = {};
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = element.querySelector(select.cart.toggleTrigger); 
+      thisCart.dom.productList = element.querySelector(select.cart.productList);
     }
 
     initActions() {
@@ -165,8 +166,15 @@
     }
 
     add(menuProduct) {
-      //const thisCart = this;
+      const thisCart = this;
       console.log('adding product', menuProduct);
+      
+      const generatedHTML = templates.cartProduct(menuProduct);
+      const generatedDOM = utils.createDOMFromHTML(generatedHTML);
+      console.log('generatedDOM: ', generatedDOM);
+
+      thisCart.dom.productList.appendChild(generatedDOM);
+    
     }
   }
 
@@ -341,30 +349,59 @@
       price *= thisProduct.amountWidget.value;
       thisProduct.priceSingle = price;
       thisProduct.dom.priceElem.innerHTML = price;
+      console.log('new price: ', price);
     }
 
-    addToCart() {
-      const thisProduct = this; 
-      
-      app.cart.add(thisProduct.prepareCartProduct);
-      console.log('prepareCartProduct: ', thisProduct.prepareCartProduct);
-    }
+    
 
     prepareCartProduct() {
+      console.log('wywołano prepareCartProduct');
       const thisProduct = this;
 
       const productSummary = {
         id: thisProduct.id,
-        name: thisProduct.data.nam,
+        name: thisProduct.data.name,
         amount: thisProduct.amountWidget.value,
         priceSingle: thisProduct.priceSingle,
-        price: productSummary.priceSingle * productSummary.amount,
-        params: {},
+        price: thisProduct.amountWidget.value * thisProduct.priceSingle,
+        params: thisProduct.prepareCartProductParams(),
       };
 
       console.log('productSummary: ', productSummary);
       return productSummary;
       
+    }
+
+    addToCart() {
+      console.log('wywołano addToCart');
+      const thisProduct = this; 
+      
+      app.cart.add(thisProduct.prepareCartProduct());
+      console.log('prepareCartProduct: ', thisProduct.prepareCartProduct());
+    }
+
+    prepareCartProductParams() {
+      const thisProduct = this;
+
+      const formData = utils.serializeFormToObject(thisProduct.dom.form);
+      const params = {};
+
+      for(let paramId in thisProduct.data.params) {
+        const param = thisProduct.data.params[paramId];
+        params[paramId] = {
+          label: param.label,
+          options: {},
+        };
+        for(let optionId in param.options) {
+          const option = param.options[optionId];
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId); 
+          if(optionSelected) {
+            params[paramId].options[optionId] = option.label;  
+          }          
+        }
+      }
+      console.log('params: ', params);
+      return params;
     }
   }
   
