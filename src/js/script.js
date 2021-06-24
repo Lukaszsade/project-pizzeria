@@ -104,19 +104,20 @@
       const newValue = parseInt(value);
       console.log('isNaN(newValue): ', isNaN(newValue));
   
-      if(thisWidget.value !== newValue && !isNaN(newValue) && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax) {
+      if(thisWidget.value !== newValue 
+        && !isNaN(newValue) 
+        && newValue >= settings.amountWidget.defaultMin 
+        && newValue <= settings.amountWidget.defaultMax) {
         thisWidget.value = newValue;
       }
 
       thisWidget.input.value = thisWidget.value;
       console.log('thisWidget: ', thisWidget);
       thisWidget.announce();
-      console.log('wywołano announce');
     }
 
     announce() {
       const thisWidget = this;
-
       const event = new Event('updated');
       thisWidget.element.dispatchEvent(event);
     }
@@ -174,10 +175,50 @@
       console.log('generatedDOM: ', generatedDOM);
 
       thisCart.dom.productList.appendChild(generatedDOM);
-    
+      thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
+      console.log('thisCart.products: ', thisCart.products);
     }
   }
 
+  class CartProduct {
+    constructor(menuProduct, element) {
+      const thisCartProduct = this;
+      
+      thisCartProduct.id = menuProduct.id;
+      thisCartProduct.name = menuProduct.name;
+      thisCartProduct.params = menuProduct.params;
+      thisCartProduct.amount = menuProduct.amount;
+      thisCartProduct.priceSingle = menuProduct.priceSingle;
+      thisCartProduct.price = menuProduct.price;
+      
+      thisCartProduct.getElements(element);
+      thisCartProduct.initAmountWidget();
+      console.log('thisCartProduct: ', thisCartProduct);
+    }
+
+    getElements(element){
+      const thisCartProduct = this;
+
+      thisCartProduct.dom = {
+        wrapper: element,
+        amountWidget: document.querySelector(select.cartProduct.amountWidget),
+        price: document.querySelector(select.cartProduct.price),
+        edit: document.querySelector(select.cartProduct.edit),
+        remove: document.querySelector(select.cartProduct.remove),
+      };
+    }
+
+    initAmountWidget(){
+      const thisCartProduct = this;
+
+      thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget);
+      thisCartProduct.dom.amountWidget.addEventListener('change', function() {
+        thisCartProduct.amount = thisCartProduct.amountWidget.value;
+        thisCartProduct.price = thisCartProduct.priceSingle * thisCartProduct.amount;
+        thisCartProduct.dom.price.innerHTML = thisCartProduct.price;  
+      });
+    }
+  }
   const app = {
     initMenu: function () {
       const thisApp = this;
@@ -346,13 +387,12 @@
           }           
         }
       }
-      price *= thisProduct.amountWidget.value;
       thisProduct.priceSingle = price;
+
+      price *= thisProduct.amountWidget.value;
       thisProduct.dom.priceElem.innerHTML = price;
       console.log('new price: ', price);
     }
-
-    
 
     prepareCartProduct() {
       console.log('wywołano prepareCartProduct');
