@@ -112,7 +112,6 @@
       }
 
       thisWidget.input.value = thisWidget.value;
-      console.log('thisWidget: ', thisWidget);
       thisWidget.announce();
     }
 
@@ -167,6 +166,7 @@
 
     initActions() {
       const thisCart = this;
+
       thisCart.dom.toggleTrigger.addEventListener('click', function() {
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
       });
@@ -180,11 +180,9 @@
 
     add(menuProduct) {
       const thisCart = this;
-      console.log('adding product', menuProduct);
-      
+
       const generatedHTML = templates.cartProduct(menuProduct);
       const generatedDOM = utils.createDOMFromHTML(generatedHTML);
-      console.log('generatedDOM: ', generatedDOM);
 
       thisCart.dom.productList.appendChild(generatedDOM);
       thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
@@ -194,6 +192,7 @@
 
     update() {
       const thisCart = this;
+      
       const deliveryFee = settings.cart.defaultDeliveryFee;
       thisCart.totalNumber = 0;
       thisCart.subTotalPrice = 0;
@@ -210,7 +209,6 @@
         thisCart.dom.deliveryFee.innerHTML = 0;
         thisCart.totalPrice = 0;
       }
-      
       for(let selector of thisCart.dom.totalPrice) {
         selector.innerHTML = thisCart.totalPrice;
       } 
@@ -228,6 +226,7 @@
       const indexOfProduct = thisCart.products.indexOf(cartProduct);
       const removedProduct = thisCart.products.splice(indexOfProduct, 1);
       console.log('removedProduct: ', removedProduct);
+
       thisCart.update();
     }
   }
@@ -249,7 +248,7 @@
       console.log('thisCartProduct: ', thisCartProduct);
     }
 
-    getElements(element){
+    getElements(element) {
       const thisCartProduct = this;
 
       thisCartProduct.dom = {
@@ -261,7 +260,7 @@
       };
     }
 
-    initAmountWidget(){
+    initAmountWidget() {
       const thisCartProduct = this;
 
       thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget);
@@ -272,7 +271,7 @@
       });
     }
 
-    remove(){
+    remove() {
       const thisCartProduct = this;
       const event = new CustomEvent('remove', {
         bubbles:true,
@@ -284,7 +283,7 @@
       console.log('wywołano remove');
     }
 
-    initActions(){
+    initActions() {
       const thisCartProduct = this;
       thisCartProduct.dom.edit.addEventListener('click', function(event) {    
         event.preventDefault();
@@ -333,7 +332,6 @@
   };
 
   class Product {
-    //wzor funkcji
     constructor (id, data) {
       const thisProduct = this;
       thisProduct.id = id;
@@ -386,22 +384,20 @@
 
         if(activeProduct && activeProduct != thisProduct.element) { 
           activeProduct.classList.remove(classNames.menuProduct.wrapperActive);
-          console.log('usunięto klasę active z pozostałych produktów');
         }
 
         thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive);
-        console.log('activ toggle');
       });
     }
 
     initOrderForm() {
       const thisProduct = this;
-      console.log('initOrderForm');
 
-      thisProduct.dom.form.addEventListener('submit', function(event){
+      thisProduct.dom.form.addEventListener('submit', function(event) {
         event.preventDefault();
         thisProduct.processOrder();
       });
+      
       for(let input of thisProduct.dom.formInputs) {
         input.addEventListener('change', function(event) {
           thisProduct.processOrder();
@@ -422,21 +418,17 @@
       thisProduct.dom.amountWidgetElem.addEventListener('updated', function() {
         thisProduct.processOrder();
       });
-    
     }
 
     processOrder() {
       const thisProduct = this;
-      console.log('thisProduct: ', this);
 
-      // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
       const formData = utils.serializeFormToObject(thisProduct.dom.form);
       console.log('formData', formData);
 
       let price = thisProduct.data.price;
       
       for(let paramId in thisProduct.data.params) {
-        // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
         const param = thisProduct.data.params[paramId];
         for(let optionId in param.options) {
           const option = param.options[optionId];
@@ -467,11 +459,9 @@
 
       price *= thisProduct.amountWidget.value;
       thisProduct.dom.priceElem.innerHTML = price;
-      console.log('new price: ', price);
     }
 
     prepareCartProduct() {
-      console.log('wywołano prepareCartProduct');
       const thisProduct = this;
 
       const productSummary = {
@@ -483,17 +473,13 @@
         params: thisProduct.prepareCartProductParams(),
       };
 
-      console.log('productSummary: ', productSummary);
-      return productSummary;
-      
+      return productSummary;      
     }
 
     addToCart() {
-      console.log('wywołano addToCart');
       const thisProduct = this; 
       
       app.cart.add(thisProduct.prepareCartProduct());
-      console.log('prepareCartProduct: ', thisProduct.prepareCartProduct());
     }
 
     prepareCartProductParams() {
@@ -516,7 +502,6 @@
           }          
         }
       }
-      console.log('params: ', params);
       return params;
     }
   }
