@@ -504,7 +504,6 @@
       }
       return params;
     }
-  }
-  
+  }  
   app.init();
 }
