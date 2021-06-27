@@ -72,6 +72,11 @@
     cart: {
       defaultDeliveryFee: 20,
     },
+    db: {
+      url: '//localhost:3131',
+      products: 'products',
+      orders: 'orders',
+    },
   };
 
   const templates = {
@@ -162,6 +167,7 @@
       thisCart.dom.subTotalPrice = element.querySelector(select.cart.subtotalPrice);
       thisCart.dom.totalPrice = element.querySelectorAll(select.cart.totalPrice);
       thisCart.dom.totalNumber = element.querySelector(select.cart.totalNumber);
+      thisCart.dom.form = element.querySelector(select.cart.form);
     }
 
     initActions() {
@@ -175,6 +181,10 @@
       });
       thisCart.dom.productList.addEventListener('remove', function(event) {
         thisCart.remove(event.detail.cartProduct);
+      });
+      thisCart.dom.form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        thisCart.sendOrder();
       });
     }
 
@@ -228,6 +238,41 @@
       console.log('removedProduct: ', removedProduct);
 
       thisCart.update();
+    }
+
+    sendOrder() {
+      const thisCart = this;
+
+      const url = settings.db.url + '/' + settings.db.orders;
+
+      const formData = utils.serializeFormToObject(thisCart.dom.form);
+      console.log('formData: ', formData);
+      // zamiast konwertować formularz na obiekt w stałej formData można dojść do address i phone przez input i atrybut value formularza:
+      //thisCart.dom.form.input
+      const payload = {
+        phone: formData.phone,
+        address: formData.address,
+        totalPrice: thisCart.totalPrice,
+        subTotalPrice: thisCart.totalPrice - settings.cart.defaultDeliveryFee,
+        totalNumber: thisCart.totalNumber,
+        deliveryFee: settings.cart.defaultDeliveryFee,
+        products: [],
+      };
+      console.log('payload: ', payload);
+      
+      for(let prod of thisCart.products) {
+        payload.products.push(prod.getData());
+      } 
+
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      }; 
+
+      fetch(url, options);
     }
   }
 
@@ -293,6 +338,20 @@
         thisCartProduct.remove();
       }); 
     }
+
+    getData() {
+      const thisCartProduct = this;
+
+      const dataLoad ={
+        id: thisCartProduct.id,
+        name: thisCartProduct.name,
+        params: thisCartProduct.params,
+        amount: thisCartProduct.amount,
+        priceSingle: thisCartProduct.priceSingle,
+        price: thisCartProduct.price,
+      };
+      return dataLoad;
+    }
   }
   const app = {
     initMenu: function () {
@@ -300,13 +359,30 @@
       console.log('thisApp.data: ', thisApp.data);
       
       for(let productData in thisApp.data.products) {
-        new Product(productData, thisApp.data.products[productData]);
+        new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
       } 
     },
 
     initData: function() {
       const thisApp = this;
-      thisApp.data = dataSource;
+      
+      thisApp.data = {};
+      const url = settings.db.url + '/' + settings.db.products;
+      
+      fetch(url)
+        .then(function(rawResponse) {
+          return rawResponse.json();
+        })
+        .then(function(parsedResponse) {
+          console.log('parsedResponse: ', parsedResponse);
+        
+          /* save parsedResponse as thisApp.data.products */
+          thisApp.data.products = parsedResponse;
+          /* execute initMenu method */
+          thisApp.initMenu();
+        });
+
+      console.log('thisApp.data: ', JSON.stringify(thisApp.data));
     },
     
     initCart: function() {
@@ -325,8 +401,7 @@
       console.log('settings:', settings);
       console.log('templates:', templates);
 
-      thisApp.initData();//initData jest wywoływana pierwsza, bo initMenu musi juz skorzystac z danych z initData
-      thisApp.initMenu();
+      thisApp.initData();
       thisApp.initCart();
     },
   };
