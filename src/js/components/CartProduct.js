@@ -50,7 +50,6 @@ class CartProduct {
       },
     });
     thisCartProduct.dom.wrapper.dispatchEvent(event);
-    console.log('wywołano remove');
   }
 
   initActions() {
