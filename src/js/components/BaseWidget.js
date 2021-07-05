@@ -1,4 +1,3 @@
-
 class BaseWidget {
   constructor(wrapperElement, initialValue) {
     const thisWidget = this;
@@ -6,22 +5,31 @@ class BaseWidget {
     thisWidget.dom = {};
     thisWidget.dom.wrapper = wrapperElement;
 
-    thisWidget.correctvalue = initialValue;
-    
-    console.log('thisWidget.correctvalue: ', thisWidget.correctvalue);
+    thisWidget.correctValue = initialValue;
   }
   
-  setValue(value) {
+  get value() {
+    const thisWidget = this;
+
+    return thisWidget.correctValue;
+  }
+  set value(value) {
     const thisWidget = this;
     const newValue = thisWidget.parseValue(value);
 
-    if(thisWidget.correctvalue != newValue 
+    if(newValue != thisWidget.correctValue   
       && thisWidget.isValid(newValue)) { 
-      thisWidget.correctvalue = newValue;
+      thisWidget.correctValue = newValue;
       thisWidget.announce();
     }
 
     thisWidget.renderValue();
+  }
+
+  setValue(value) {
+    const thisWidget = this;
+
+    thisWidget.value = value;
   }
   
   parseValue(value) {
@@ -35,8 +43,7 @@ class BaseWidget {
   renderValue(){
     const thisWidget = this;
 
-    thisWidget.dom.wrapper.innerHTML = thisWidget.correctvalue;
-    console.log('wyrenderowano: ', thisWidget.correctvalue);
+    thisWidget.dom.wrapper.innerHTML = thisWidget.value;
   }
   
   announce() {
