@@ -14,7 +14,7 @@ class Booking {
     const thisBooking = this;
 
     const generatedHTML = templates.bookingWidget(); 
-    thisBooking.dom ={};
+    thisBooking.dom = {};
     thisBooking.dom.wrapper = element;
     thisBooking.dom.wrapper.innerHTML = generatedHTML;
     thisBooking.dom.peopleAmount = element.querySelector(select.booking.peopleAmount); 
@@ -28,9 +28,9 @@ class Booking {
     thisBooking.amountWidgets.peopleAmount = new AmountWidget(thisBooking.dom.peopleAmount);
     thisBooking.amountWidgets.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount);
 
-    thisBooking.amountWidgets.addEventListener('updated', function(event){
-      
-    });
+    //thisBooking.amountWidgets.addEventListener('updated', function(event) {
+
+    //});
 
   
   }
