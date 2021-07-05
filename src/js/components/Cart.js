@@ -50,7 +50,6 @@ class Cart {
     const generatedDOM = utils.createDOMFromHTML(generatedHTML);
 
     thisCart.dom.productList.appendChild(generatedDOM);
-    thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
     console.log('menuProduct: ', menuProduct);
     thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
     console.log('generatedDOM: ', generatedDOM);
