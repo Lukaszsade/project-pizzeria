@@ -36,7 +36,7 @@ class Product {
     thisProduct.dom.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
     thisProduct.dom.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     thisProduct.dom.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
-    console.log('thisProduct.dom.amountWidgetElem:', thisProduct.dom.amountWidgetElem);
+    // console.log('thisProduct.dom.amountWidgetElem:', thisProduct.dom.amountWidgetElem);
   }
 
   initAccordion() {
@@ -70,7 +70,7 @@ class Product {
     for(let input of thisProduct.dom.formInputs) {
       input.addEventListener('change', function(event) {
         thisProduct.processOrder();
-        console.log('event: ', event);
+        // console.log('event: ', event);
       });
     }
     thisProduct.dom.cartButton.addEventListener('click', function(event) {
@@ -84,7 +84,7 @@ class Product {
     const thisProduct = this;
 
     thisProduct.amountWidget = new AmountWidget(thisProduct.dom.amountWidgetElem);
-    console.log('thisProduct.amountWidget w Product: ', thisProduct.amountWidget);
+    // console.log('thisProduct.amountWidget w Product: ', thisProduct.amountWidget);
     thisProduct.dom.amountWidgetElem.addEventListener('updated', function() {
       thisProduct.processOrder();
     });
@@ -108,7 +108,7 @@ class Product {
         } else {
           if(option.default) {
             price = price - option.price;
-            console.log('option.price: ', option.price);
+            // console.log('option.price: ', option.price);
           }
         }
         
@@ -127,7 +127,7 @@ class Product {
 
     price *= thisProduct.amountWidget.value;
     thisProduct.dom.priceElem.innerHTML = price;
-    console.log('thisProduct.dom.amountWidgetElem.input.innerHTML: ', thisProduct.dom.amountWidgetElem.innerHTML);
+    // console.log('thisProduct.dom.amountWidgetElem.input.innerHTML: ', thisProduct.dom.amountWidgetElem.innerHTML);
   }
 
   prepareCartProduct() {
@@ -157,7 +157,7 @@ class Product {
     });
 
     thisProduct.element.dispatchEvent(event);
-    console.log('event:' , event);
+    // console.log('event:' , event);
   }
 
   prepareCartProductParams() {

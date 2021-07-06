@@ -1,6 +1,6 @@
-import { select, templates } from '../settings.js';
+import { select, settings, templates } from '../settings.js';
 import AmountWidget from './AmountWidget.js';
-import DatePicker from './DatePicker.js';
+import DatePicker from './AmountWidget.js';
 import HourPicker from './HourPicker.js';
 
 class Booking {
@@ -9,7 +9,34 @@ class Booking {
 
     thisBooking.render(element);
     thisBooking.initWidgets();
+    thisBooking.getData();
 
+  }
+
+  getData(){
+    const thisBooking = this;
+
+    const params = {
+      booking: [
+        'abc=xyz', 'lorem=ipsum'
+      ],
+      eventsCurrent: [
+
+      ],
+      eventsRepeat: [
+
+      ],
+    };
+
+    const urls = {
+      booking:       settings.db.url + '/' + settings.db.booking
+                                     + '?' + params.booking.join('&'), 
+      eventsCurrent: settings.db.url + '/' + settings.db.event 
+                                     + '?' + params.eventsCurrent.join('&'), 
+      eventsRepeat:  settings.db.url + '/' + settings.db.event 
+                                     + '?' + params.eventsRepeat.join('&'), 
+    };
+    console.log('urls: ', urls);
   }
 
   render(element) {
