@@ -13,6 +13,7 @@ class BaseWidget {
 
     return thisWidget.correctValue;
   }
+
   set value(value) {
     const thisWidget = this;
     const newValue = thisWidget.parseValue(value);

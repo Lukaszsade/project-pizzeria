@@ -70,7 +70,7 @@ class Product {
     for(let input of thisProduct.dom.formInputs) {
       input.addEventListener('change', function(event) {
         thisProduct.processOrder();
-        // console.log('event: ', event);
+        console.log('event: ', event);
       });
     }
     thisProduct.dom.cartButton.addEventListener('click', function(event) {
