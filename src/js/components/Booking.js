@@ -74,7 +74,7 @@ class Booking {
   
   parseData(bookings, eventsCurrent, eventsRepeat) {
     const thisBooking = this;
-    console.log(eventsRepeat);
+
     thisBooking.booked = {};
 
     for(let item of bookings) {
@@ -180,7 +180,7 @@ class Booking {
 
     if(selectedTable && selectedTable != clickedTable.target) { 
       selectedTable.classList.remove(classNames.booking.selected);
-      thisBooking.selectedTableId = false;
+      thisBooking.selectedTableId = null;
     }
     
     if(clickedTable.target.classList.contains(classNames.booking.table)) {
@@ -190,7 +190,7 @@ class Booking {
         if(clickedTable.target.classList.contains(classNames.booking.selected))  {
           thisBooking.selectedTableId = clickedTable.target.getAttribute('data-table'); 
         } else {
-          thisBooking.selectedTableId = false;
+          thisBooking.selectedTableId = null;
         }
       } else {
         alert('Stolik jest zajęty!');
@@ -210,7 +210,6 @@ class Booking {
     thisBooking.dom.wrapper.addEventListener('updated', function() {
       thisBooking.updateDOM();
       thisBooking.initTable();
-      console.log('wykonano reset po updacie');
     });
    
     thisBooking.dom.tablesWrapper.addEventListener('click', function(event) {
@@ -225,10 +224,9 @@ class Booking {
 
       if(selectedTable) { 
         selectedTable.classList.remove(classNames.booking.selected);
-        thisBooking.selectedTableId = false;
+        thisBooking.selectedTableId = null;
       }
     });
-
 
     thisBooking.dom.form.addEventListener('submit', function(event) {
       event.preventDefault();
@@ -242,11 +240,11 @@ class Booking {
     const url = settings.db.url + '/' + settings.db.booking;
 
     const formData = utils.serializeFormToObject(thisBooking.dom.form);
-    console.log('formData: ', formData);
+    console.log('thisBooking.hourPicker: ', thisBooking.hourPicker);
     
     const payload = {
       date: formData.date,
-      hour: formData.hour,
+      hour: thisBooking.hourPicker.correctValue,
       table: parseInt(thisBooking.selectedTableId),
       duration: parseInt(formData.hours),
       ppl: parseInt(formData.people),
@@ -254,12 +252,9 @@ class Booking {
       phone: formData.phone,
       address: formData.address,
     };
-    console.log('payload: ', payload);
     
     payload.starters.push(formData.starter);
     
-      
-
     const options = {
       method: 'POST',
       headers: {
@@ -269,8 +264,9 @@ class Booking {
     }; 
 
     fetch(url, options);
-    thisBooking.makeBooked(formData.date, formData.hour, payload.duration, payload.table);
-    console.log('thisBooking.booked');
+    
+    thisBooking.makeBooked(formData.date, thisBooking.hourPicker.correctValue, payload.duration, payload.table);
+    console.log('thisBooking.booked: ', thisBooking.booked);
   
   }
 }
