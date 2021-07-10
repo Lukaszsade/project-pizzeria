@@ -13,7 +13,6 @@ class Booking {
     thisBooking.getData();
     
     thisBooking.selectedTableId = null;
-    console.log('thisBooking: ', thisBooking);
   }
 
   getData() {
@@ -95,8 +94,6 @@ class Booking {
         }
       }
     }
-    
-    console.log('thisBooking.booked: ', thisBooking.booked);
     thisBooking.updateDOM();
     thisBooking.initTable();
   }
@@ -196,7 +193,6 @@ class Booking {
         alert('Stolik jest zajęty!');
       }
     }
-    console.log('thisBooking.selectedTableId: ', thisBooking.selectedTableId);
   }
 
   initWidgets() {
@@ -240,7 +236,6 @@ class Booking {
     const url = settings.db.url + '/' + settings.db.booking;
 
     const formData = utils.serializeFormToObject(thisBooking.dom.form);
-    console.log('thisBooking.hourPicker: ', thisBooking.hourPicker);
     
     const payload = {
       date: formData.date,
