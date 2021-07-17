@@ -10,6 +10,8 @@ section {
   border-radius: $radius;
 }
 
+/* Services */
+
 .row {
   display: flex;
   
@@ -50,23 +52,25 @@ section {
 
 .services .row:first-child {
   p {
-    // display: none;
     opacity: 0;
-    transform: translateY(-10px);
     transition: all 0.5s;
   }
 
   .image-content {
     display: flex;
     flex-direction: column;
-    line-height: 0.2;
+    transform: translateY(10px);
+    transition: 0.5s;
   }
 }
 
-.services .row:first-child .image-content:hover p {
-  opacity: 1;
-  transform: translateY(-10px);
-  
+.services .row:first-child .image-content:hover { 
+  transform: translateY(1px);
+
+  p {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
 }
 
 .info-cart {
