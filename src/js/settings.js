@@ -19,6 +19,9 @@ export const select = {
     menuProductsActive: '.product.active',
     formInputs: 'input, select',
   },
+  home: {
+    serviceLink: '.service-link',
+  },
   menuProduct: {
     clickable: '.product__header',
     form: '.product__order',

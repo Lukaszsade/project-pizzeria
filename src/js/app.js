@@ -36,6 +36,23 @@ const app = {
         window.location.hash ='#/' + id;
       });
     }
+    //nie wyszukuje linkow :>
+    thisApp.serviceLinks = document.querySelectorAll(select.home.serviceLink);
+    console.log('thisApp.serviceLinks: ', thisApp.serviceLinks);
+
+    for(let link of thisApp.serviceLinks) {
+      link.addEventListener('click', function(event) {
+        event.preventDefoult();
+        const clickedElement = this;
+        console.log('kliknięto link this: ', clickedElement);
+        
+        const id = clickedElement.getAttribute('href').replace('#', '');
+
+        thisApp.activatePage(id);
+
+        window.location.hash ='#/' + id;
+      });
+    }
   },
 
   activatePage: function(pageId){
@@ -59,7 +76,6 @@ const app = {
 
     const homeElem = document.querySelector(select.containerOf.home);
     thisApp.homePage = new HomePage(homeElem);
-    console.log('homeElem: ', homeElem);
   },
 
   initMenu: function () {

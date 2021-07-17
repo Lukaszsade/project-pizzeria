@@ -16,8 +16,6 @@ class HomePage {
     thisHP.dom = {};
     thisHP.dom.wrapper = element;
     thisHP.dom.wrapper.innerHTML = generatedHtml;
-    console.log('thisHP.dom: ', thisHP.dom);
-
   }
 }
 
