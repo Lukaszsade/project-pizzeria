@@ -48,6 +48,7 @@
     },
     "dependencies": {
         "flatpickr": "^4.6.9",
+        "flickity": "^2.2.2",
         "json-server": "^0.16.3"
     }
 }

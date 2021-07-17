@@ -1,4 +1,21 @@
 {
+  "carousel": [
+    {
+      "image":"<img src=\"images/assets/pizza-3.jpg\">",
+      "quote":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "author":"Margart Osbourne"
+    },
+    {
+      "image":"<img src=\"images/assets/pizza-4.jpg\">",
+      "quote":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "author":"Margart Osbourne"
+    },
+    {
+      "image":"<img src=\"images/assets/pizza-5.jpg\">",
+      "quote":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "author":"Margart Osbourne"
+    }
+  ],
   "products": [
     {
       "id":"cake",
