@@ -185,12 +185,53 @@ class Booking {
         clickedTable.target.classList.toggle(classNames.booking.selected);
       
         if(clickedTable.target.classList.contains(classNames.booking.selected))  {
-          thisBooking.selectedTableId = clickedTable.target.getAttribute('data-table'); 
+          thisBooking.selectedTableId = clickedTable.target.getAttribute('data-table');
+          thisBooking.checkTableAvlbty(); 
         } else {
           thisBooking.selectedTableId = null;
         }
       } else {
         alert('Stolik jest zajęty!');
+      }
+    }
+
+    console.log(thisBooking);
+  }
+
+  checkTableAvlbty() {
+    const thisBooking = this;
+    thisBooking.tableAvailability = false;
+    
+    thisBooking.duration = thisBooking.amountWidgets.hoursAmount.correctValue;
+
+        
+    // każdy blok wybranego czasu rezerwacji ma być miejszy niż suma wybranej godziny i czasu trwania 
+    for(let pickedHour = thisBooking.hour; pickedHour < thisBooking.hour + thisBooking.duration; pickedHour += 0.5) {
+      
+      //przechodzimy po każdej zarezerwowanej w danym dniu godzinie
+      // sparwdzamy czy pickedhour znajduje sie w zabukowanych godzinachbooked.
+      // console.log('thisBooking.booked[thisBooking.date].includes(pickedHour): ', thisBooking.booked[thisBooking.date].contains(pickedHour));     
+      
+      for(let hour in thisBooking.booked[thisBooking.date]) {
+        
+        hour = parseInt(hour);
+        const clickedTable = parseInt(thisBooking.selectedTableId);
+        const bookedTable = thisBooking.booked[thisBooking.date][hour];
+        
+        if(hour == pickedHour && bookedTable.includes(clickedTable)) {
+          console.log('hour: ', hour);
+          console.log('pickedHour: ', pickedHour);
+          console.log('bookedTable: ', bookedTable);
+          console.log('clickedTable: ', clickedTable);
+          console.log('stolik jest zajęty od godziny ', hour);
+          
+          alert('Skróć czas rezerwacji! Ten stolik nie jest dostępny w wybranych godzinach.');
+          thisBooking.tableAvailability = false;
+          
+        } else {
+          console.log('Stolik dostępny dla godziny ', pickedHour);
+          thisBooking.tableAvailability = true;
+        }
       }
     }
   }
